@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Fei\Service\Mailer\Client\Mailer;
 use Fei\Service\Mailer\Entity\Mail;
 
-$mailer = new Mailer('http://127.0.0.1:8081');
+$mailer = new Mailer(array(Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081'));
 
 $message = new Mail();
 $message->setSubject('И');
