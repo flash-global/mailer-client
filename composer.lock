@@ -81,16 +81,16 @@
         },
         {
             "name": "fei/mailer-common",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "git@github.com:flash-global/mailer-common.git",
-                "reference": "37941792fc445541765769272cdf35a5673543d6"
+                "reference": "f7bf5733129090726a61da4457339078a6d2d010"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/37941792fc445541765769272cdf35a5673543d6",
-                "reference": "37941792fc445541765769272cdf35a5673543d6",
+                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/f7bf5733129090726a61da4457339078a6d2d010",
+                "reference": "f7bf5733129090726a61da4457339078a6d2d010",
                 "shasum": ""
             },
             "require": {
@@ -122,10 +122,10 @@
                 "mailer"
             ],
             "support": {
-                "source": "https://github.com/flash-global/mailer-common/tree/v1.0.3",
+                "source": "https://github.com/flash-global/mailer-common/tree/v1.0.4",
                 "issues": "https://github.com/flash-global/mailer-common/issues"
             },
-            "time": "2016-07-18 14:52:14"
+            "time": "2016-07-23 14:45:18"
         },
         {
             "name": "guzzle/guzzle",
@@ -516,16 +516,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "2.2.2",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "8d80bb4ec7470e8df5de0e4c401785bc3fa1f4f6"
+                "reference": "34c268ae5872105c0c218296487650ab08e3991b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/8d80bb4ec7470e8df5de0e4c401785bc3fa1f4f6",
-                "reference": "8d80bb4ec7470e8df5de0e4c401785bc3fa1f4f6",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/34c268ae5872105c0c218296487650ab08e3991b",
+                "reference": "34c268ae5872105c0c218296487650ab08e3991b",
                 "shasum": ""
             },
             "require": {
@@ -603,7 +603,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2016-06-29 00:59:28"
+            "time": "2016-07-24 19:31:22"
         },
         {
             "name": "doctrine/instantiator",
