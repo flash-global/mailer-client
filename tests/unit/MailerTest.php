@@ -4,18 +4,18 @@ namespace Tests\Fei\Service\Mailer\Client;
 
 use Codeception\Test\Unit;
 use Fei\ApiClient\ApiClientException;
-use Fei\ApiClient\Transport\TransportInterface;
+use Fei\ApiClient\Transport\SyncTransportInterface;
 use Fei\Service\Mailer\Client\Mailer;
 use Fei\Service\Mailer\Entity\Mail;
 
-class LoggerTest extends Unit
+class MailerTest extends Unit
 {
     public function testTransmit()
     {
-        $transport = $this->createMock(TransportInterface::class);
+        $transport = $this->createMock(SyncTransportInterface::class);
         $transport->expects($this->once())->method('send');
 
-        $mailer = new Mailer('http://url');
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
         $mailer->setTransport($transport);
 
         $mailer->transmit($this->getValidMailInstance());
@@ -30,7 +30,7 @@ subject: Subject is empty; body: Both text and html bodies are empty; sender: Se
 HEREDOC
         );
 
-        $mailer = new Mailer('http://url');
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
         $mailer->transmit(new Mail());
     }
 
@@ -38,15 +38,15 @@ HEREDOC
     {
         $this->expectException(ApiClientException::class);
 
-        $mailer = new Mailer('http://url');
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
         $mailer->transmit($this->getValidMailInstance());
     }
 
     public function testTransmitMailConvertEncoding()
     {
-        $transport = $this->createMock(TransportInterface::class);
+        $transport = $this->createMock(SyncTransportInterface::class);
 
-        $mailer = new Mailer('http://url');
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
         $mailer->setTransport($transport);
 
         $mail = $this->getValidMailInstance();

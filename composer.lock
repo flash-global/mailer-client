@@ -4,26 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c45c8ec80ec4c43bfda804b015a55212",
-    "content-hash": "db1f20e48d809b22a542f79e2798cd9c",
+    "hash": "7d8ca4cc2ea758d9b53934f40aefd49a",
+    "content-hash": "16e4aa9f15690494a6dd2f711af35445",
     "packages": [
         {
             "name": "fei/api-client",
-            "version": "v1.0.5",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:flash-global/api-client.git",
-                "reference": "df2b05ee8742519a9da273c51c86710a8400412c"
+                "reference": "d932cccd1f0444c45ba3a833bc299430b2e729db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flash-global/api-client/zipball/df2b05ee8742519a9da273c51c86710a8400412c",
-                "reference": "df2b05ee8742519a9da273c51c86710a8400412c",
+                "url": "https://api.github.com/repos/flash-global/api-client/zipball/d932cccd1f0444c45ba3a833bc299430b2e729db",
+                "reference": "d932cccd1f0444c45ba3a833bc299430b2e729db",
                 "shasum": ""
             },
             "require": {
                 "fei/entities": "1.*",
-                "guzzle/guzzle": "^3.9"
+                "guzzle/guzzle": "^3.9",
+                "pda/pheanstalk": "^3.1"
             },
             "require-dev": {
                 "codeception/aspect-mock": "*",
@@ -40,10 +41,10 @@
             ],
             "description": "FEI client side API helpers",
             "support": {
-                "source": "https://github.com/flash-global/api-client/tree/v1.0.5",
+                "source": "https://github.com/flash-global/api-client/tree/v1.1.0",
                 "issues": "https://github.com/flash-global/api-client/issues"
             },
-            "time": "2016-07-15 15:40:49"
+            "time": "2016-07-25 09:17:07"
         },
         {
             "name": "fei/entities",
@@ -222,6 +223,56 @@
             ],
             "abandoned": "guzzlehttp/guzzle",
             "time": "2015-03-18 18:23:50"
+        },
+        {
+            "name": "pda/pheanstalk",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pda/pheanstalk.git",
+                "reference": "430e77c551479aad0c6ada0450ee844cf656a18b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pda/pheanstalk/zipball/430e77c551479aad0c6ada0450ee844cf656a18b",
+                "reference": "430e77c551479aad0c6ada0450ee844cf656a18b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pheanstalk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Annesley",
+                    "email": "paul@annesley.cc",
+                    "homepage": "http://paul.annesley.cc/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP client for beanstalkd queue",
+            "homepage": "https://github.com/pda/pheanstalk",
+            "keywords": [
+                "beanstalkd"
+            ],
+            "time": "2015-08-07 21:42:41"
         },
         {
             "name": "symfony/event-dispatcher",

@@ -33,16 +33,6 @@ class Mailer extends AbstractApiClient
     );
 
     /**
-     * Mailer constructor.
-     *
-     * @param string $baseUrl The Mailer API base URL
-     */
-    public function __construct($baseUrl)
-    {
-        $this->setBaseUrl($baseUrl);
-    }
-
-    /**
      * Transmit mails
      *
      * @param Mail  $mail
