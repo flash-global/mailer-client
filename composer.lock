@@ -82,16 +82,16 @@
         },
         {
             "name": "fei/mailer-common",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:flash-global/mailer-common.git",
-                "reference": "f7bf5733129090726a61da4457339078a6d2d010"
+                "reference": "5cb579c622a74303ae1cd32d24975e82edf0ec93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/f7bf5733129090726a61da4457339078a6d2d010",
-                "reference": "f7bf5733129090726a61da4457339078a6d2d010",
+                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/5cb579c622a74303ae1cd32d24975e82edf0ec93",
+                "reference": "5cb579c622a74303ae1cd32d24975e82edf0ec93",
                 "shasum": ""
             },
             "require": {
@@ -123,10 +123,10 @@
                 "mailer"
             ],
             "support": {
-                "source": "https://github.com/flash-global/mailer-common/tree/v1.0.4",
+                "source": "https://github.com/flash-global/mailer-common/tree/v1.0.5",
                 "issues": "https://github.com/flash-global/mailer-common/issues"
             },
-            "time": "2016-07-23 14:45:18"
+            "time": "2016-07-25 16:41:30"
         },
         {
             "name": "guzzle/guzzle",
