@@ -105,6 +105,24 @@ The message workflow:
 Client -> Pheanstalkd -> Workers -> Mail API server
 ```
 
+### Use the logger Luke
+
+Mailer client is _Logger client aware_. You could set a logger instance like this example below in order to activate logging functionality.
+
+```php
+$logger = new Logger([
+    Logger::OPTION_BASEURL => 'http://127.0.0.1:8082',
+    Logger::OPTION_FILTER => Notification::LVL_INFO
+]);
+$logger->setTransport(new BasicTransport());
+
+$mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081']);
+$mailer->setTransport(new BasicTransport());
+$mailer->setLogger($logger); // Set and activate the the logger functionality
+```
+
+As is each mail sent will be recorded with logger service.
+
 ## Email and attachments
 
 Here a example if you need to send email with attachments :

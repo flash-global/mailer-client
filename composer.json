@@ -26,6 +26,7 @@
     "require": {
         "fei/mailer-common": "^1.0.3",
         "fei/api-client": "^1.1.0",
+        "fei/logger-client": "^1.2.4",
         "zendframework/zend-json": "2.2.10"
     },
     "require-dev": {

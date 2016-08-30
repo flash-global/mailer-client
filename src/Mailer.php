@@ -6,6 +6,8 @@ use Fei\ApiClient\AbstractApiClient;
 use Fei\ApiClient\ApiRequestOption;
 use Fei\ApiClient\RequestDescriptor;
 use Fei\ApiClient\Transport\BasicTransport;
+use Fei\Service\Logger\Client\Logger;
+use Fei\Service\Logger\Entity\Notification;
 use Fei\Service\Mailer\Entity\Mail;
 use Fei\Service\Mailer\Validator\MailValidator;
 use Zend\Json\Json;
@@ -17,6 +19,11 @@ use Zend\Json\Json;
  */
 class Mailer extends AbstractApiClient
 {
+    /**
+     * @var Logger
+     */
+    protected $logger;
+
     /**
      * @var array Supported encodings. Order matter.
      * @see http://php.net/manual/en/mbstring.supported-encodings.php
@@ -39,6 +46,8 @@ class Mailer extends AbstractApiClient
      * @param array $context
      *
      * @return bool|\Fei\ApiClient\ResponseDescriptor
+     *
+     * @throws \Exception
      */
     public function transmit(Mail $mail, array $context = array())
     {
@@ -54,7 +63,7 @@ class Mailer extends AbstractApiClient
         Json::$useBuiltinEncoderDecoder = true;
 
         try {
-            $request->addBodyParam('mail', Json::encode($mail));
+            $encoded = Json::encode($mail);
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf('Unable to serialize mail: %s', $e->getMessage()),
@@ -63,9 +72,11 @@ class Mailer extends AbstractApiClient
             );
         }
 
+        $request->addBodyParam('mail', $encoded);
+
         if (!empty($context)) {
             try {
-                $request->addBodyParam('context', Json::encode($context));
+                $encoded = Json::encode($context);
             } catch (\Exception $e) {
                 throw new \LogicException(
                     sprintf('Unable to serialize context: %s', $e->getMessage()),
@@ -74,6 +85,7 @@ class Mailer extends AbstractApiClient
                 );
             }
 
+            $request->addBodyParam('context', $encoded);
         }
 
         $request->setUrl($this->buildUrl('/api/mails'));
@@ -83,7 +95,43 @@ class Mailer extends AbstractApiClient
             $this->setTransport(new BasicTransport());
         }
 
-        return $this->send($request, ApiRequestOption::NO_RESPONSE);
+        $notification = new Notification();
+        $notification
+            ->setNamespace('/mailer/client')
+            ->setCategory(Notification::AUDIT)
+            ->setContext($mail->getContext());
+
+        try {
+            $response = $this->send($request, ApiRequestOption::NO_RESPONSE);
+
+            if ($response && $this->getLogger() instanceof Logger) {
+                $notification
+                    ->setMessage('Successfully sent mail')
+                    ->setLevel(Notification::LVL_INFO);
+
+                $this->getLogger()->notify($notification);
+            }
+        } catch (\Exception $e) {
+            if ($this->getLogger() instanceof Logger) {
+                $notification
+                    ->setMessage(sprintf('Failed to sent mail (%s)', $e->getMessage()))
+                    ->setLevel(Notification::LVL_ERROR);
+
+                $this->getLogger()->notify($notification);
+            }
+
+            throw $e;
+        }
+
+        if (!$response && $this->getLogger() instanceof Logger) {
+            $notification
+                ->setMessage('Failed to sent mail')
+                ->setLevel(Notification::LVL_ERROR);
+
+            $this->getLogger()->notify($notification);
+        }
+
+        return $response;
     }
 
     /**
@@ -173,5 +221,25 @@ class Mailer extends AbstractApiClient
         }
 
         return $converted;
+    }
+
+    /**
+     * Get logger client instance
+     *
+     * @return Logger
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * Set logger client instance
+     *
+     * @param Logger $logger
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
     }
 }

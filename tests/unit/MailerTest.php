@@ -5,18 +5,108 @@ namespace Tests\Fei\Service\Mailer\Client;
 use Codeception\Test\Unit;
 use Fei\ApiClient\ApiClientException;
 use Fei\ApiClient\Transport\SyncTransportInterface;
+use Fei\Service\Logger\Client\Logger;
 use Fei\Service\Mailer\Client\Mailer;
 use Fei\Service\Mailer\Entity\Mail;
 
 class MailerTest extends Unit
 {
+    public function testLogger()
+    {
+        $mailer = new Mailer();
+        $mailer->setLogger(new Logger());
+
+        $this->assertEquals(new Logger(), $mailer->getLogger());
+        $this->assertAttributeEquals($mailer->getLogger(), 'logger', $mailer);
+    }
+
     public function testTransmit()
     {
         $transport = $this->createMock(SyncTransportInterface::class);
-        $transport->expects($this->once())->method('send');
+        $transport->expects($this->once())->method('send')->willReturn(true);
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->never())->method('notify');
 
         $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
         $mailer->setTransport($transport);
+
+        $mailer->transmit($this->getValidMailInstance());
+    }
+
+    public function testTransmitWithLogger()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willReturn(true);
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('notify');
+
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer->setTransport($transport);
+        $mailer->setLogger($logger);
+
+        $mailer->transmit($this->getValidMailInstance());
+    }
+
+    public function testTransmitThrowException()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willThrowException(new \Exception('test'));
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->never())->method('notify');
+
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer->setTransport($transport);
+
+        $this->expectException(\Exception::class);
+
+        $mailer->transmit($this->getValidMailInstance());
+    }
+
+    public function testTransmitThrowExceptionWithLogger()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willThrowException(new \Exception('test'));
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('notify');
+
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer->setTransport($transport);
+        $mailer->setLogger($logger);
+
+        $this->expectException(\Exception::class);
+
+        $mailer->transmit($this->getValidMailInstance());
+    }
+
+    public function testTransmitReturnFalse()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willReturn(false);
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->never())->method('notify');
+
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer->setTransport($transport);
+
+        $mailer->transmit($this->getValidMailInstance());
+    }
+
+    public function testTransmitReturnFalseWithLogger()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willReturn(false);
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('notify');
+
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer->setTransport($transport);
+        $mailer->setLogger($logger);
 
         $mailer->transmit($this->getValidMailInstance());
     }
