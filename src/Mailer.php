@@ -19,6 +19,12 @@ use Zend\Json\Json;
  */
 class Mailer extends AbstractApiClient
 {
+
+    const OPTION_CATCHALL_ADDRESS = 'catchallAddress';
+
+
+    protected $catchallAddress;
+
     /**
      * @var Logger
      */
@@ -55,6 +61,31 @@ class Mailer extends AbstractApiClient
         if (!$validator->validate($mail)) {
             throw new \LogicException(sprintf("Mail instance is not valid:\n%s", $validator->getErrorsAsString()));
         }
+
+        // handle recipient rerouting if needed
+        if($catchall = $this->getOption(self::OPTION_CATCHALL_ADDRESS))
+        {
+            $recipients = $mail->getRecipients();
+            $cc = $mail->getCc();
+            $bcc = $mail->getBcc();
+
+            $info = '**************************************************' . PHP_EOL;
+            $info .= 'Original recipients: ' . "\t" . implode(', ', $recipients) . PHP_EOL;
+            if($cc) $info .= 'Original cc: ' . "\t" . implode(', ', $cc) . PHP_EOL;
+            if($bcc) $info .= 'Original bcc: ' . "\t" . implode(', ', $bcc) . PHP_EOL;
+            $info .= '**************************************************' . PHP_EOL;
+
+            if($mail->getTextBody()) $mail->setTextBody($info . $mail->getTextBody());
+            if($mail->getHtmlBody()) $mail->setHtmlBody($info . $mail->getHtmlBody());
+
+            $mail->setSubject('[Caught] ' . $mail->getSubject());
+            $mail->clearRecipients();
+            $mail->clearCc();
+            $mail->clearBcc();
+
+            $mail->setRecipients([$catchall]);
+        }
+
 
         $mail = $this->toUtf8($mail);
 
