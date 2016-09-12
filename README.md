@@ -166,6 +166,7 @@ $mailer->transmit($message);
 
 Only one option is available which can be passed to the `__construct()` or `setOptions()` methods:
 
-| Option         | Description                                    | Type   | Possible Values                                | Default |
-|----------------|------------------------------------------------|--------|------------------------------------------------|---------|
-| OPTION_BASEURL | This is the server to which send the requests. | string | Any URL, including protocol but excluding path | -       |
+| Option                  | Description                                    | Type   | Possible Values                                | Default |
+|-------------------------|------------------------------------------------|--------|------------------------------------------------|---------|
+| OPTION_BASEURL          | This is the server to which send the requests. | string | Any URL, including protocol but excluding path | -       |
+| OPTION_CATCHALL_ADDRESS | Recipient to substitute to any other. When used, original recipients, ccs, bccs are prepended to mail body.| string | Any valid email address | - |
