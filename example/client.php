@@ -29,6 +29,7 @@ $message->setTextBody('This is a example message');
 $message->addRecipient('to@test.com');
 $message->setSender(array('sender@test.com'));
 $message->addBcc('bcc@email.com', 'A bcc');
+$message->setReplyTo(array('steve@apple.com' => 'Steve'));
 
 $return = $mailer->transmit($message);
 

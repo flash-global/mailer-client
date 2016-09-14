@@ -135,6 +135,7 @@ require __DIR__ . '/vendor/autoload.php';
 use Fei\Service\Mailer\Client\Mailer;
 use Fei\ApiClient\Transport\BasicTransport;
 use Fei\Service\Mailer\Entity\Mail;
+use Fei\Service\Mailer\Entity\Attachment;
 
 $message = new Mail();
 $message->setSubject('Test subject');
@@ -144,6 +145,7 @@ $message->setRecipients(array('to@test.com' => 'Name', 'other@test.com' => 'Othe
 $message->addCc('cc@example.com', 'CC');
 $message->addBcc('bcc@example.com', 'CC');
 $message->setSender(array('sender@test.com' => 'The sender'));
+$message->setReplyTo(array('steve@app.com' => 'Steve'));
 
 // Add a attachment with a \SplObjectFile
 $message->addAttachment(new \SplFileObject('/to/file/path/image.png'));
@@ -155,6 +157,12 @@ $attachment = array(
     // Note base64_encode
     'contents' => base64_encode('Hello world!') . PHP_EOL
 );
+$message->addAttachment($attachment);
+
+// Or add a attachment object
+$attachment = new Attachment('/to/file/path/document.pdf');
+$attachment->setAttachmentFilename('another-filename.txt');
+$attachment->setMimeType('text/plain');
 $message->addAttachment($attachment);
 
 $mailer = new Mailer(array(Mailer::OPTION_BASEURL => 'https://api_host'));
