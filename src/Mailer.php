@@ -32,7 +32,7 @@ class Mailer extends AbstractApiClient
     protected $logger;
 
     /** @var  Logger */
-    protected $loggerInfo;
+    protected $auditLogger;
 
     /**
      * @var array Supported encodings. Order matter.
@@ -67,12 +67,12 @@ class Mailer extends AbstractApiClient
         }
 
         if($this->getOption(self::OPTION_LOG_MAIL_SENT)) {
-            if(empty($this->getLoggerInfo())) {
+            if(empty($this->getAuditLogger())) {
 
                 if(empty($this->getLogger())) {
-                    throw new \LogicException("A logger as to be set for logging mails.");
+                    throw new \LogicException("A logger has to be set for logging mails.");
                 }
-                $this->setLoggerInfo($this->getLogger());
+                $this->setAuditLogger($this->getLogger());
             }
         }
 
@@ -150,13 +150,13 @@ class Mailer extends AbstractApiClient
         try {
             $response = $this->send($request, ApiRequestOption::NO_RESPONSE);
 
-            if ($response && $this->getLoggerInfo() instanceof Logger) {
+            if ($response && $this->getAuditLogger() instanceof Logger) {
                 $notification
                     ->setMessage('Successfully sent mail')
                     ->setLevel(Notification::LVL_INFO)
                 ;
 
-                $this->getLoggerInfo()->notify($notification);
+                $this->getAuditLogger()->notify($notification);
             }
         } catch (\Exception $e) {
             if ($this->getLogger() instanceof Logger) {
@@ -293,19 +293,19 @@ class Mailer extends AbstractApiClient
     /**
      * @return Logger
      */
-    public function getLoggerInfo()
+    public function getAuditLogger()
     {
-        return $this->loggerInfo;
+        return $this->auditLogger;
     }
 
     /**
-     * @param Logger $loggerInfo
+     * @param Logger $auditLogger
      *
      * @return $this
      */
-    public function setLoggerInfo($loggerInfo)
+    public function setAuditLogger($auditLogger)
     {
-        $this->loggerInfo = $loggerInfo;
+        $this->auditLogger = $auditLogger;
 
         return $this;
     }

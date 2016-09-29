@@ -42,7 +42,10 @@ class MailerTest extends Unit
         $logger = $this->createMock(Logger::class);
         $logger->expects($this->once())->method('notify');
 
-        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer = new Mailer([
+            Mailer::OPTION_BASEURL => 'http://url',
+            Mailer::OPTION_LOG_MAIL_SENT => true
+        ]);
         $mailer->setTransport($transport);
         $mailer->setLogger($logger);
 
@@ -188,6 +191,28 @@ HEREDOC
 
 
         $mailer->transmit($mail);
+    }
+
+
+    public function testAuditLoggerIsUsed()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willReturn(true);
+
+        $logger = $this->createMock(Logger::class);
+        $auditLogger = $this->createMock(Logger::class);
+        $auditLogger->expects($this->once())->method('notify');
+        $logger->expects($this->never())->method('notify');
+
+        $mailer = new Mailer([
+            Mailer::OPTION_BASEURL => 'http://url',
+            Mailer::OPTION_LOG_MAIL_SENT => true
+        ]);
+        $mailer->setTransport($transport);
+        $mailer->setLogger($logger);
+        $mailer->setAuditLogger($auditLogger);
+
+        $mailer->transmit($this->getValidMailInstance());
     }
 
     /**
