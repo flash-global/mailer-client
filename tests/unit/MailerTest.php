@@ -167,10 +167,8 @@ HEREDOC
         }
     }
 
-
     public function testCatchAllAddress()
     {
-
         $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url', Mailer::OPTION_CATCHALL_ADDRESS => 'dev@dev.com']);
 
         $transport = $this->createMock(SyncTransportInterface::class);
@@ -185,7 +183,6 @@ HEREDOC
         $mail->method('getBcc')->willReturn([]);
         $mail->method('getCc')->willReturn([]);
         $mail->expects($this->exactly(2))->method('setRecipients')->with($this->logicalOr(['original@recipient.com' => 'Original recipient'], ['dev@dev.com']));
-
 
         $mailer->transmit($mail);
     }
@@ -202,5 +199,4 @@ HEREDOC
             ->setSender(['tes@email.com'])
             ->setRecipients(['test@test.com']);
     }
-
 }
