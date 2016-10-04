@@ -42,9 +42,25 @@ class MailerTest extends Unit
         $logger = $this->createMock(Logger::class);
         $logger->expects($this->once())->method('notify');
 
-        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer = new Mailer([
+            Mailer::OPTION_BASEURL => 'http://url',
+            Mailer::OPTION_LOG_MAIL_SENT => true
+        ]);
         $mailer->setTransport($transport);
         $mailer->setLogger($logger);
+
+        $mailer->transmit($this->getValidMailInstance());
+    }
+
+    public function testTransmitWithLoggerThrowException()
+    {
+        $mailer = new Mailer([
+            Mailer::OPTION_BASEURL => 'http://url',
+            Mailer::OPTION_LOG_MAIL_SENT => true
+        ]);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('A logger has to be set for logging mails.');
 
         $mailer->transmit($this->getValidMailInstance());
     }
@@ -185,6 +201,28 @@ HEREDOC
         $mail->expects($this->exactly(2))->method('setRecipients')->with($this->logicalOr(['original@recipient.com' => 'Original recipient'], ['dev@dev.com']));
 
         $mailer->transmit($mail);
+    }
+
+
+    public function testAuditLoggerIsUsed()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willReturn(true);
+
+        $logger = $this->createMock(Logger::class);
+        $auditLogger = $this->createMock(Logger::class);
+        $auditLogger->expects($this->once())->method('notify');
+        $logger->expects($this->never())->method('notify');
+
+        $mailer = new Mailer([
+            Mailer::OPTION_BASEURL => 'http://url',
+            Mailer::OPTION_LOG_MAIL_SENT => true
+        ]);
+        $mailer->setTransport($transport);
+        $mailer->setLogger($logger);
+        $mailer->setAuditLogger($auditLogger);
+
+        $mailer->transmit($this->getValidMailInstance());
     }
 
     /**

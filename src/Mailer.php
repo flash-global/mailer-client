@@ -21,6 +21,7 @@ class Mailer extends AbstractApiClient
 {
 
     const OPTION_CATCHALL_ADDRESS = 'catchallAddress';
+    const OPTION_LOG_MAIL_SENT = 'logAllMailInfo';
 
 
     protected $catchallAddress;
@@ -29,6 +30,9 @@ class Mailer extends AbstractApiClient
      * @var Logger
      */
     protected $logger;
+
+    /** @var  Logger */
+    protected $auditLogger;
 
     /**
      * @var array Supported encodings. Order matter.
@@ -61,6 +65,17 @@ class Mailer extends AbstractApiClient
         if (!$validator->validate($mail)) {
             throw new \LogicException(sprintf("Mail instance is not valid:\n%s", $validator->getErrorsAsString()));
         }
+
+        if($this->getOption(self::OPTION_LOG_MAIL_SENT)) {
+            if(empty($this->getAuditLogger())) {
+
+                if(empty($this->getLogger())) {
+                    throw new \LogicException("A logger has to be set for logging mails.");
+                }
+                $this->setAuditLogger($this->getLogger());
+            }
+        }
+
 
         // handle recipient rerouting if needed
         if($catchall = $this->getOption(self::OPTION_CATCHALL_ADDRESS))
@@ -135,12 +150,13 @@ class Mailer extends AbstractApiClient
         try {
             $response = $this->send($request, ApiRequestOption::NO_RESPONSE);
 
-            if ($response && $this->getLogger() instanceof Logger) {
+            if ($response && $this->getAuditLogger() instanceof Logger) {
                 $notification
                     ->setMessage('Successfully sent mail')
-                    ->setLevel(Notification::LVL_INFO);
+                    ->setLevel(Notification::LVL_INFO)
+                ;
 
-                $this->getLogger()->notify($notification);
+                $this->getAuditLogger()->notify($notification);
             }
         } catch (\Exception $e) {
             if ($this->getLogger() instanceof Logger) {
@@ -272,5 +288,25 @@ class Mailer extends AbstractApiClient
     public function setLogger(Logger $logger)
     {
         $this->logger = $logger;
+    }
+
+    /**
+     * @return Logger
+     */
+    public function getAuditLogger()
+    {
+        return $this->auditLogger;
+    }
+
+    /**
+     * @param Logger $auditLogger
+     *
+     * @return $this
+     */
+    public function setAuditLogger($auditLogger)
+    {
+        $this->auditLogger = $auditLogger;
+
+        return $this;
     }
 }
