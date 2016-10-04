@@ -52,6 +52,19 @@ class MailerTest extends Unit
         $mailer->transmit($this->getValidMailInstance());
     }
 
+    public function testTransmitWithLoggerThrowException()
+    {
+        $mailer = new Mailer([
+            Mailer::OPTION_BASEURL => 'http://url',
+            Mailer::OPTION_LOG_MAIL_SENT => true
+        ]);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('A logger has to be set for logging mails.');
+
+        $mailer->transmit($this->getValidMailInstance());
+    }
+
     public function testTransmitThrowException()
     {
         $transport = $this->createMock(SyncTransportInterface::class);
