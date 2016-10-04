@@ -769,16 +769,16 @@
         },
         {
             "name": "fei/mailer-common",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "git@github.com:flash-global/mailer-common.git",
-                "reference": "b23f2d69703e4124a84a9dd7038fba32ffd181f2"
+                "reference": "2e6e269b50559e329278eccb046f56ccbca3c8b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/b23f2d69703e4124a84a9dd7038fba32ffd181f2",
-                "reference": "b23f2d69703e4124a84a9dd7038fba32ffd181f2",
+                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/2e6e269b50559e329278eccb046f56ccbca3c8b2",
+                "reference": "2e6e269b50559e329278eccb046f56ccbca3c8b2",
                 "shasum": ""
             },
             "require": {
@@ -810,10 +810,10 @@
                 "mailer"
             ],
             "support": {
-                "source": "https://github.com/flash-global/mailer-common/tree/v1.0.8",
+                "source": "https://github.com/flash-global/mailer-common/tree/master",
                 "issues": "https://github.com/flash-global/mailer-common/issues"
             },
-            "time": "2016-09-14 14:22:50"
+            "time": "2016-09-30 10:02:28"
         },
         {
             "name": "guzzle/guzzle",
@@ -1725,16 +1725,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "9270140b940ff02e58ec577c237274e92cd40cdd"
+                "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/9270140b940ff02e58ec577c237274e92cd40cdd",
-                "reference": "9270140b940ff02e58ec577c237274e92cd40cdd",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/8331b5efe816ae05461b7ca1e721c01b46bafb3e",
+                "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e",
                 "shasum": ""
             },
             "require": {
@@ -1766,7 +1766,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-06-10 09:48:41"
+            "time": "2016-09-30 07:12:33"
         },
         {
             "name": "phpdocumentor/type-resolver",

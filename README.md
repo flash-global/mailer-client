@@ -105,11 +105,13 @@ The message workflow:
 Client -> Pheanstalkd -> Workers -> Mail API server
 ```
 
-### Use the logger Luke
+### Use the logger
 
 Mailer client is _Logger client aware_. You could set a logger instance like this example below in order to activate logging functionality.
 
 ```php
+<?php
+
 $logger = new Logger([
     Logger::OPTION_BASEURL => 'http://127.0.0.1:8082',
     Logger::OPTION_FILTER => Notification::LVL_INFO
@@ -168,6 +170,63 @@ $message->addAttachment($attachment);
 $mailer = new Mailer(array(Mailer::OPTION_BASEURL => 'https://api_host'));
 $mailer->setTransport(new BasicTransport());
 $mailer->transmit($message);
+```
+
+### Embedding attachment
+
+Sometime, you need to include image (or other media) inline in your message. You could use a resource URL in order to
+linking the media but this approach is usually blocked by mail clients. A another approach is to embed your media
+directly into your message.
+
+```php
+<?php
+
+use Fei\Service\Mailer\Entity\Mail;
+use Fei\Service\Mailer\Entity\Attachment;
+
+$message = new Mail();
+
+$embedded = (new Attachment('/my/picture.png', true));
+$message->addAttachment($embedded);
+
+$message->setTextBody('This is a example message');
+$message->setHtmlBody(<<<HTML
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+</head>
+<body>
+    <p>
+        <img src="{$embedded->getCid()}" style="display: block; width: 100px; height: 100px; float: right;">
+        This is example with a embedded image
+    </p>
+</body>
+</html>
+HTML
+);
+
+```
+
+And that's it.
+
+## Catch them all
+
+In non production environment, you often don't need to send email to the real recipient. For testing purpose, you could
+initialize the client with the option `OPTION_CATCHALL_ADDRESS` and all email will be forwarded to email address passed
+to this option.
+
+```php
+<?php
+
+use Fei\Service\Mailer\Client\Mailer;
+
+$mailer = new Mailer([
+    Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081',
+    Mailer::OPTION_CATCHALL_ADDRESS => 'testing@email.com'
+]);
+
 ```
 
 ## Client option
