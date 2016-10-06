@@ -229,6 +229,40 @@ $mailer = new Mailer([
 
 ```
 
+## Add callback functions before Mail instance validation
+
+For different needs, you could registered a callback to apply on `Mail` to be send before its state validation.
+
+You can see this as a another way to extends the "mailer-client" functionalities. 
+
+```php
+<?php
+
+use Fei\Service\Mailer\Client\Mailer;
+use Fei\Service\Mailer\Entity\Mail;
+
+$mailer = new Mailer();
+$mailer->addCallbackBeforeValidation(function (Mail $mail) {
+    $mail->setRecipients(['another@email.com']);
+});
+
+```
+
+With this example, all `Mail` send with this client will have theirs recipients changed by `another@email.com`.
+
+We provide a couple of another method to manage callbacks:
+
+* `Mailer::addFirstCallbackBeforeValidation`: append a callback on the first place of the stack to be executed in
+  contrast to `addCallbackBeforeValidation` which place the callback in the end of the chain execution. 
+* `Mailer::clearCallbackBeforeValidation`: remove all callback registered in the stack 
+
+## Pricer integration: meet the `PricerMailer` class
+
+We provide a child class of `Mailer` for the Pricer need: `PricerMailer`.
+
+`PricerMailer` extends functionalities `Mailer` plus a callback which apply email filtering on the `Mail` instance to
+be send. Naturally, you can remove this filter or add yours own.
+
 ## Client option
 
 Only one option is available which can be passed to the `__construct()` or `setOptions()` methods:

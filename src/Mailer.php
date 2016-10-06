@@ -23,7 +23,9 @@ class Mailer extends AbstractApiClient
     const OPTION_CATCHALL_ADDRESS = 'catchallAddress';
     const OPTION_LOG_MAIL_SENT = 'logAllMailInfo';
 
-
+    /**
+     * @var string
+     */
     protected $catchallAddress;
 
     /**
@@ -38,7 +40,7 @@ class Mailer extends AbstractApiClient
      * @var array Supported encodings. Order matter.
      * @see http://php.net/manual/en/mbstring.supported-encodings.php
      */
-    protected $encodings = array(
+    protected $encodings = [
         'ASCII', 'UTF-8', 'Windows-1252', 'ISO-8859-15', 'ISO-8859-1', 'UCS-4', 'UCS-4BE', 'UCS-4LE', 'UCS-2',
         'UCS-2BE', 'UCS-2LE', 'UTF-32', 'UTF-32BE', 'UTF-32LE', 'UTF-16', 'UTF-16BE', 'UTF-16LE', 'UTF-7', 'UTF7-IMAP',
         'EUC-JP', 'SJIS', 'eucJP-win', 'SJIS-win', 'ISO-2022-JP', 'ISO-2022-JP-MS', 'CP932', 'CP51932', 'SJIS-mac',
@@ -47,7 +49,12 @@ class Mailer extends AbstractApiClient
         'ISO-8859-14', 'byte2be', 'byte2le', 'byte4be', 'byte4le', 'BASE64', '7bit', '8bit', 'EUC-CN',  'CP936', 'HZ',
         'EUC-TW', 'CP950', 'BIG-5', 'EUC-KR', 'UHC', 'ISO-2022-KR', 'Windows-1251', 'CP866', 'KOI8-R', 'ArmSCII-8',
         'CP850'
-    );
+    ];
+
+    /**
+     * @var callable[]
+     */
+    protected $callbackBeforeValidation = [];
 
     /**
      * Transmit mails
@@ -61,21 +68,37 @@ class Mailer extends AbstractApiClient
      */
     public function transmit(Mail $mail, array $context = array())
     {
+        $this->executeCallbackBeforeValidation($mail);
+
+        $notification = new Notification();
+        $notification
+            ->setNamespace('/mailer/client')
+            ->setCategory(Notification::AUDIT)
+            ->setContext($mail->getContext());
+
         $validator = new MailValidator();
         if (!$validator->validate($mail)) {
-            throw new \LogicException(sprintf("Mail instance is not valid:\n%s", $validator->getErrorsAsString()));
+            if(empty($this->getLogger())) {
+                throw new \LogicException(sprintf("Mail instance is not valid:\n%s", $validator->getErrorsAsString()));
+            }
+
+            $notification
+                ->setMessage(sprintf(sprintf("Mail instance is not valid:\n%s", $validator->getErrorsAsString())))
+                ->setLevel(Notification::LVL_ERROR);
+
+            $this->getLogger()->notify($notification);
+
+            return false;
         }
 
         if($this->getOption(self::OPTION_LOG_MAIL_SENT)) {
             if(empty($this->getAuditLogger())) {
-
                 if(empty($this->getLogger())) {
                     throw new \LogicException("A logger has to be set for logging mails.");
                 }
                 $this->setAuditLogger($this->getLogger());
             }
         }
-
 
         // handle recipient rerouting if needed
         if($catchall = $this->getOption(self::OPTION_CATCHALL_ADDRESS))
@@ -100,7 +123,6 @@ class Mailer extends AbstractApiClient
 
             $mail->setRecipients([$catchall]);
         }
-
 
         $mail = $this->toUtf8($mail);
 
@@ -179,6 +201,129 @@ class Mailer extends AbstractApiClient
         }
 
         return $response;
+    }
+
+    /**
+     * Get logger client instance
+     *
+     * @return Logger
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * Set logger client instance
+     *
+     * @param Logger $logger
+     *
+     * @return $this
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * @return Logger
+     */
+    public function getAuditLogger()
+    {
+        return $this->auditLogger;
+    }
+
+    /**
+     * @param Logger $auditLogger
+     *
+     * @return $this
+     */
+    public function setAuditLogger($auditLogger)
+    {
+        $this->auditLogger = $auditLogger;
+
+        return $this;
+    }
+
+    /**
+     * Get CallbackBeforeValidation
+     *
+     * @return \callable[]
+     */
+    public function getCallbackBeforeValidation()
+    {
+        return $this->callbackBeforeValidation;
+    }
+
+    /**
+     * Add a callback to be executed before validation.
+     * The function or method accepts a Mail instance as parameter
+     *
+     * function (Mail $mail) {
+     *     // Do some stuff with Mail instance
+     * }
+     *
+     * @param callable $callable
+     *
+     * @return $this
+     */
+    public function addCallbackBeforeValidation(callable $callable)
+    {
+        $this->callbackBeforeValidation[] = $callable;
+
+        return $this;
+    }
+
+    /**
+     * Add a callback to be executed before validation in first position
+     *
+     * @param callable $callable
+     *
+     * @return $this
+     */
+    public function addFirstCallbackBeforeValidation(callable $callable)
+    {
+        array_unshift($this->callbackBeforeValidation, $callable);
+
+        return $this;
+    }
+
+    /**
+     * Clear the registered callback stack
+     *
+     * @return $this
+     */
+    public function clearCallbackBeforeValidation()
+    {
+        $this->callbackBeforeValidation = [];
+
+        return $this;
+    }
+
+    /**
+     * Execute registered callbacks
+     *
+     * @param Mail $mail
+     */
+    protected function executeCallbackBeforeValidation(Mail $mail)
+    {
+        foreach ($this->getCallbackBeforeValidation() as $callback) {
+            $callback($mail);
+        }
+    }
+
+    /**
+     * Send a notification to Audit Logger
+     *
+     * @param Notification $notification
+     */
+    protected function sendAuditNotification(Notification $notification)
+    {
+        if ($this->getAuditLogger() instanceof Logger) {
+            $this->getAuditLogger()->notify($notification);
+        }
     }
 
     /**
@@ -268,45 +413,5 @@ class Mailer extends AbstractApiClient
         }
 
         return $converted;
-    }
-
-    /**
-     * Get logger client instance
-     *
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Set logger client instance
-     *
-     * @param Logger $logger
-     */
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getAuditLogger()
-    {
-        return $this->auditLogger;
-    }
-
-    /**
-     * @param Logger $auditLogger
-     *
-     * @return $this
-     */
-    public function setAuditLogger($auditLogger)
-    {
-        $this->auditLogger = $auditLogger;
-
-        return $this;
     }
 }

@@ -20,6 +20,73 @@ class MailerTest extends Unit
         $this->assertAttributeEquals($mailer->getLogger(), 'logger', $mailer);
     }
 
+    public function testCallbackBeforeValidation()
+    {
+        $mailer = new Mailer();
+
+        $mailer->addCallbackBeforeValidation(function () {});
+        $mailer->addCallbackBeforeValidation(function () {});
+
+        $this->assertEquals([function () {}, function (){}], $mailer->getCallbackBeforeValidation());
+        $this->assertAttributeEquals($mailer->getCallbackBeforeValidation(), 'callbackBeforeValidation', $mailer);
+    }
+
+    public function testClearCallbackBeforeValidation()
+    {
+        $mailer = new Mailer();
+
+        $mailer->addCallbackBeforeValidation(function () {});
+        $mailer->addCallbackBeforeValidation(function () {});
+
+        $this->assertCount(2, $mailer->getCallbackBeforeValidation());
+
+        $mailer->clearCallbackBeforeValidation();
+
+        $this->assertEmpty($mailer->getCallbackBeforeValidation());
+    }
+
+    public function testAddFirstCallbackBeforeValidation()
+    {
+        $mailer = new Mailer();
+
+        $mailer->addCallbackBeforeValidation(function () {$i = 0;});
+        $mailer->addCallbackBeforeValidation(function () {$i = 1;});
+        $mailer->addFirstCallbackBeforeValidation(function () {$i = -1;});
+
+        $this->assertEquals(
+            [function () {$i = -1;}, function (){$i = 0;}, function () {$i = 1;}],
+            $mailer->getCallbackBeforeValidation()
+        );
+    }
+
+    public function testExecuteCallbackBeforeValidation()
+    {
+        $transport = $this->createMock(SyncTransportInterface::class);
+        $transport->expects($this->once())->method('send')->willReturn(true);
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->never())->method('notify');
+
+        $mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://url']);
+        $mailer->setTransport($transport);
+
+        $mailer->addCallbackBeforeValidation(function (Mail $mail) {
+            $mail->setRecipients(['test@test.com'])
+                ->setSender(['tes@email.com']);
+        });
+
+        $mailer->addCallbackBeforeValidation(function (Mail $mail) {
+            $mail->setTextBody('Test')
+                ->setSubject('Test');
+        });
+
+        $mail = new Mail();
+
+        $mailer->transmit($mail);
+
+        $this->assertEquals($this->getValidMailInstance(), $mail);
+    }
+
     public function testTransmit()
     {
         $transport = $this->createMock(SyncTransportInterface::class);
@@ -140,6 +207,17 @@ HEREDOC
         $mailer->transmit(new Mail());
     }
 
+    public function testTransmitMailNoValidWithLogger()
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('notify');
+
+        $mailer = new Mailer();
+        $mailer->setLogger($logger);
+
+        $this->assertFalse($mailer->transmit(new Mail()));
+    }
+
     public function testTransmitNoServer()
     {
         $this->expectException(ApiClientException::class);
@@ -202,7 +280,6 @@ HEREDOC
 
         $mailer->transmit($mail);
     }
-
 
     public function testAuditLoggerIsUsed()
     {

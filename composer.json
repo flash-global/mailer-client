@@ -27,7 +27,8 @@
         "fei/mailer-common": "^1.0.3",
         "fei/api-client": "^1.1.0",
         "fei/logger-client": "^1.2.4",
-        "zendframework/zend-json": "^2.4.9"
+        "zendframework/zend-json": "^2.4.9",
+        "egulias/email-validator": "^2.1"
     },
     "require-dev": {
         "codeception/codeception": "^2.2"
