@@ -826,16 +826,16 @@
         },
         {
             "name": "fei/mailer-common",
-            "version": "v1.0.12",
+            "version": "v1.0.13",
             "source": {
                 "type": "git",
                 "url": "git@github.com:flash-global/mailer-common.git",
-                "reference": "393241e9d3274b62f50c937a6ca202556e7194ac"
+                "reference": "ad336f955fa4b27f991d46376e3d6467bb42b635"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/393241e9d3274b62f50c937a6ca202556e7194ac",
-                "reference": "393241e9d3274b62f50c937a6ca202556e7194ac",
+                "url": "https://api.github.com/repos/flash-global/mailer-common/zipball/ad336f955fa4b27f991d46376e3d6467bb42b635",
+                "reference": "ad336f955fa4b27f991d46376e3d6467bb42b635",
                 "shasum": ""
             },
             "require": {
@@ -868,10 +868,10 @@
                 "mailer"
             ],
             "support": {
-                "source": "https://github.com/flash-global/mailer-common/tree/v1.0.12",
+                "source": "https://github.com/flash-global/mailer-common/tree/v1.0.13",
                 "issues": "https://github.com/flash-global/mailer-common/issues"
             },
-            "time": "2016-10-07 10:01:19"
+            "time": "2016-10-20 16:18:03"
         },
         {
             "name": "guzzle/guzzle",
@@ -1084,16 +1084,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -1127,7 +1127,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-09-19 16:02:08"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "symfony/console",
@@ -1575,24 +1575,25 @@
         },
         {
             "name": "facebook/webdriver",
-            "version": "1.1.3",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/php-webdriver.git",
-                "reference": "b7186fb1bcfda956d237f59face250d06ef47253"
+                "reference": "af21de3ae5306a8ca0bcc02a19735dadc43e83f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/b7186fb1bcfda956d237f59face250d06ef47253",
-                "reference": "b7186fb1bcfda956d237f59face250d06ef47253",
+                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/af21de3ae5306a8ca0bcc02a19735dadc43e83f3",
+                "reference": "af21de3ae5306a8ca0bcc02a19735dadc43e83f3",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": ">=5.3.19"
+                "php": "^5.5 || ~7.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^1.11",
+                "php-mock/php-mock-phpunit": "^1.1",
                 "phpunit/phpunit": "4.6.* || ~5.0",
                 "squizlabs/php_codesniffer": "^2.6"
             },
@@ -1617,20 +1618,20 @@
                 "selenium",
                 "webdriver"
             ],
-            "time": "2016-08-10 00:44:08"
+            "time": "2016-10-14 15:16:51"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.2.1",
+            "version": "6.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "3f808fba627f2c5b69e2501217bf31af349c1427"
+                "reference": "ebf29dee597f02f09f4d5bbecc68230ea9b08f60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/3f808fba627f2c5b69e2501217bf31af349c1427",
-                "reference": "3f808fba627f2c5b69e2501217bf31af349c1427",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/ebf29dee597f02f09f4d5bbecc68230ea9b08f60",
+                "reference": "ebf29dee597f02f09f4d5bbecc68230ea9b08f60",
                 "shasum": ""
             },
             "require": {
@@ -1679,7 +1680,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-07-15 17:22:37"
+            "time": "2016-10-08 15:01:37"
         },
         {
             "name": "guzzlehttp/promises",
@@ -2286,16 +2287,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.6.0",
+            "version": "5.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a7f2db56518e50ab92f28f739810dfad2f223b6b"
+                "reference": "60c32c5b5e79c2248001efa2560f831da11cc2d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a7f2db56518e50ab92f28f739810dfad2f223b6b",
-                "reference": "a7f2db56518e50ab92f28f739810dfad2f223b6b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/60c32c5b5e79c2248001efa2560f831da11cc2d7",
+                "reference": "60c32c5b5e79c2248001efa2560f831da11cc2d7",
                 "shasum": ""
             },
             "require": {
@@ -2364,20 +2365,20 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-10-06 15:20:39"
+            "time": "2016-10-07 13:03:26"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.3.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "03500345483e1e17b52e2e4d34a89c9408ab2902"
+                "reference": "238d7a2723bce689c79eeac9c7d5e1d623bb9dc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/03500345483e1e17b52e2e4d34a89c9408ab2902",
-                "reference": "03500345483e1e17b52e2e4d34a89c9408ab2902",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/238d7a2723bce689c79eeac9c7d5e1d623bb9dc2",
+                "reference": "238d7a2723bce689c79eeac9c7d5e1d623bb9dc2",
                 "shasum": ""
             },
             "require": {
@@ -2423,7 +2424,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-10-04 11:03:26"
+            "time": "2016-10-09 07:01:45"
         },
         {
             "name": "psr/http-message",

@@ -199,7 +199,7 @@ class MailerTest extends Unit
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage(<<<HEREDOC
 Mail instance is not valid:
-subject: Subject is empty; body: Both text and html bodies are empty; sender: Sender is null; recipients: Recipients is empty
+subject: Subject is empty; sender: Sender is null; recipients: Recipients is empty
 HEREDOC
         );
 
