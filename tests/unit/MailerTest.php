@@ -199,7 +199,7 @@ class MailerTest extends Unit
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage(<<<HEREDOC
 Mail instance is not valid:
-subject: Subject is empty; body: Both text and html bodies are empty; sender: Sender is null; recipients: Recipients is empty
+subject: Subject is empty; sender: Sender is null; recipients: Recipients is empty
 HEREDOC
         );
 
@@ -276,6 +276,7 @@ HEREDOC
         $mail->method('getAttachments')->willReturn([]);
         $mail->method('getBcc')->willReturn([]);
         $mail->method('getCc')->willReturn([]);
+        $mail->method('getDispositionNotificationTo')->willReturn([]);
         $mail->expects($this->exactly(2))->method('setRecipients')->with($this->logicalOr(['original@recipient.com' => 'Original recipient'], ['dev@dev.com']));
 
         $mailer->transmit($mail);
