@@ -276,6 +276,7 @@ HEREDOC
         $mail->method('getAttachments')->willReturn([]);
         $mail->method('getBcc')->willReturn([]);
         $mail->method('getCc')->willReturn([]);
+        $mail->method('getDispositionNotificationTo')->willReturn([]);
         $mail->expects($this->exactly(2))->method('setRecipients')->with($this->logicalOr(['original@recipient.com' => 'Original recipient'], ['dev@dev.com']));
 
         $mailer->transmit($mail);

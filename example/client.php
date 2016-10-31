@@ -30,6 +30,7 @@ $message->addRecipient('to@test.com');
 $message->setSender(array('sender@test.com'));
 $message->addBcc('bcc@email.com', 'A bcc');
 $message->setReplyTo(array('steve@apple.com' => 'Steve'));
+$message->setDispositionNotificationTo(array('renatus@brol.net' => 'Renatus','jonny@brol.net' => 'Jonny'));
 
 $return = $mailer->transmit($message);
 
