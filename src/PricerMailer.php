@@ -17,16 +17,16 @@ class PricerMailer extends Mailer
     /**
      * @var array
      */
-    protected $emailDelimiters = [',', ';', '/', '-', ' ', "\t"];
+    protected $emailDelimiters = array(',', ';', '/', '-', ' ', "\t");
 
     /**
      * PricerMailer constructor.
      *
      * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = array())
     {
-        $this->addCallbackBeforeValidation([$this, 'sanitizeAddress']);
+        $this->addCallbackBeforeValidation(array($this, 'sanitizeAddress'));
 
         parent::__construct($options);
     }
@@ -40,9 +40,9 @@ class PricerMailer extends Mailer
     {
         $validator = new EmailValidator();
         $sanitizer = function (array $address, array $delimiters) use ($mail, $validator) {
-            $sanitized = [];
+            $sanitized = array();
             foreach ($address as $email => $label) {
-                $invalid = [];
+                $invalid = array();
                 $filtered = array_filter(
                     explode(
                         $delimiters[0],

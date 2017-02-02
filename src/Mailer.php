@@ -40,7 +40,7 @@ class Mailer extends AbstractApiClient
      * @var array Supported encodings. Order matter.
      * @see http://php.net/manual/en/mbstring.supported-encodings.php
      */
-    protected $encodings = [
+    protected $encodings = array(
         'ASCII', 'UTF-8', 'Windows-1252', 'ISO-8859-15', 'ISO-8859-1', 'UCS-4', 'UCS-4BE', 'UCS-4LE', 'UCS-2',
         'UCS-2BE', 'UCS-2LE', 'UTF-32', 'UTF-32BE', 'UTF-32LE', 'UTF-16', 'UTF-16BE', 'UTF-16LE', 'UTF-7', 'UTF7-IMAP',
         'EUC-JP', 'SJIS', 'eucJP-win', 'SJIS-win', 'ISO-2022-JP', 'ISO-2022-JP-MS', 'CP932', 'CP51932', 'SJIS-mac',
@@ -49,12 +49,12 @@ class Mailer extends AbstractApiClient
         'ISO-8859-14', 'byte2be', 'byte2le', 'byte4be', 'byte4le', 'BASE64', '7bit', '8bit', 'EUC-CN',  'CP936', 'HZ',
         'EUC-TW', 'CP950', 'BIG-5', 'EUC-KR', 'UHC', 'ISO-2022-KR', 'Windows-1251', 'CP866', 'KOI8-R', 'ArmSCII-8',
         'CP850'
-    ];
+    );
 
     /**
      * @var callable[]
      */
-    protected $callbackBeforeValidation = [];
+    protected $callbackBeforeValidation = array();
 
     /**
      * Transmit mails
@@ -121,7 +121,7 @@ class Mailer extends AbstractApiClient
             $mail->clearCc();
             $mail->clearBcc();
 
-            $mail->setRecipients([$catchall]);
+            $mail->setRecipients(array($catchall));
         }
 
         $mail = $this->toUtf8($mail);
@@ -297,7 +297,7 @@ class Mailer extends AbstractApiClient
      */
     public function clearCallbackBeforeValidation()
     {
-        $this->callbackBeforeValidation = [];
+        $this->callbackBeforeValidation = array();
 
         return $this;
     }
