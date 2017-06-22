@@ -29,7 +29,7 @@ class PricerMailerTest extends Unit
     {
         $mail = new Mail();
         $mail->setRecipients([
-            'RBCB/Transport_externi@bosch.com',
+            'abc/cde@mail.com',
             'dest1@domain.com, dest2@domain.com ; dest3@domain.com dest4@domain.com',
             'peterb@cargospectrum.com	sergeys@cargospectrum.com	martinh@cargospectrum.com'
         ]);
@@ -39,7 +39,7 @@ class PricerMailerTest extends Unit
         $mailer->sanitizeAddress($mail);
 
         $this->assertEquals([
-            'RBCB/Transport_externi@bosch.com'=>'RBCB/Transport_externi@bosch.com',
+            'abc/cde@mail.com'=>'abc/cde@mail.com',
             'dest1@domain.com' => 'dest1@domain.com',
             'dest2@domain.com' => 'dest2@domain.com',
             'dest3@domain.com' => 'dest3@domain.com',
@@ -167,14 +167,14 @@ class PricerMailerTest extends Unit
     public function testAddressFilterWithLabel()
     {
         $mail = new Mail();
-        $mail->setRecipients(['dest1@domain.com, dest2@domain.com ; dest3@domain.com dest4@domain.com ; RBCB/Transport_externi@bosch.com' => 'a label']);
+        $mail->setRecipients(['dest1@domain.com, dest2@domain.com ; dest3@domain.com dest4@domain.com ; abc/cde@mail.com' => 'a label']);
 
         $mailer = new PricerMailer();
 
         $mailer->sanitizeAddress($mail);
 
         $this->assertEquals([
-            'RBCB/Transport_externi@bosch.com' => 'a label',
+            'abc/cde@mail.com' => 'a label',
             'dest1@domain.com' => 'a label',
             'dest2@domain.com' => 'a label',
             'dest3@domain.com' => 'a label',
@@ -188,7 +188,7 @@ class PricerMailerTest extends Unit
     {
         $mail = new Mail();
         $mail->setRecipients(
-            ['RBCB/Transport_externi@bosch.com, dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
+            ['abc/cde@mail.com, dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
         );
 
         $mailer = new PricerMailer();
@@ -196,7 +196,7 @@ class PricerMailerTest extends Unit
         $mailer->sanitizeAddress($mail);
 
         $this->assertEquals([
-            'RBCB/Transport_externi@bosch.com'=> 'RBCB/Transport_externi@bosch.com',
+            'abc/cde@mail.com'=> 'abc/cde@mail.com',
             'dest1@domain.com' => 'dest1@domain.com',
             'dest3@domain.com' => 'dest3@domain.com',
             'dest4@domain.com' => 'dest4@domain.com'
@@ -209,7 +209,7 @@ class PricerMailerTest extends Unit
     {
         $mail = new Mail();
         $mail->setRecipients(
-            ['RBCB/Transport_externi@bosch.com , dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
+            ['abc/cde@mail.com , dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
         );
 
         $notifications = [];
@@ -235,10 +235,10 @@ class PricerMailerTest extends Unit
     {
         $mail = $this->getValidMailInstance();
         $mail->setRecipients(
-            ['RBCB/Transport_externi@bosch.com, dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
+            ['abc/cde@mail.com, dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
         );
-        $mail->addBcc('RBCB/Transport_externi@bosch.com|dest1@domain.com|notaaddressemail|dest3@domain.com|dest4@domain.com', 'Test label');
-        $mail->addCc('RBCB/Transport_externi@bosch.com|dest1@domain.com,dest3@domain.com,; dest4@domain.com', '');
+        $mail->addBcc('abc/cde@mail.com|dest1@domain.com|notaaddressemail|dest3@domain.com|dest4@domain.com', 'Test label');
+        $mail->addCc('abc/cde@mail.com|dest1@domain.com,dest3@domain.com,; dest4@domain.com', '');
 
         $transport = $this->createMock(SyncTransportInterface::class);
         $transport->expects($this->once())->method('send')->willReturn(true);
@@ -253,7 +253,7 @@ class PricerMailerTest extends Unit
 
         $this->assertEquals(
             [
-                'RBCB/Transport_externi@bosch.com' => 'RBCB/Transport_externi@bosch.com',
+                'abc/cde@mail.com' => 'abc/cde@mail.com',
                 'dest1@domain.com' => 'dest1@domain.com',
                 'dest3@domain.com' => 'dest3@domain.com',
                 'dest4@domain.com' => 'dest4@domain.com'
@@ -262,7 +262,7 @@ class PricerMailerTest extends Unit
         $this->assertEquals([], $mail->getBcc());
         $this->assertEquals(
             [
-                'RBCB/Transport_externi@bosch.com' => 'RBCB/Transport_externi@bosch.com',
+                'abc/cde@mail.com' => 'abc/cde@mail.com',
                 'dest1@domain.com' => 'dest1@domain.com',
                 'dest3@domain.com' => 'dest3@domain.com',
                 'dest4@domain.com' => 'dest4@domain.com'
@@ -273,7 +273,7 @@ class PricerMailerTest extends Unit
     {
         $mail = new Mail();
         $mail->setRecipients([
-            'RBCB/Transport_externi@bosch.com',
+            'abc/cde@mail.com',
         ]);
 
         $mailer = new PricerMailer();
@@ -281,7 +281,7 @@ class PricerMailerTest extends Unit
         $mailer->sanitizeAddress($mail);
 
         $this->assertEquals([
-            'RBCB/Transport_externi@bosch.com'=>'RBCB/Transport_externi@bosch.com',
+            'abc/cde@mail.com'=>'abc/cde@mail.com',
         ],
             $mail->getRecipients()
         );
