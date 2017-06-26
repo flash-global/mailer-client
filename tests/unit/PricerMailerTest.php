@@ -63,6 +63,7 @@ class PricerMailerTest extends Unit
 
         $this->assertEquals([], $mail->getRecipients());
     }
+
     public function testAddressFilterEmailNullWithLogger()
     {
         $mail = new Mail();
@@ -95,6 +96,7 @@ class PricerMailerTest extends Unit
 
         $this->assertEquals([], $mail->getRecipients());
     }
+    
     public function testAddressFilterAll()
     {
         $mail = new Mail();
