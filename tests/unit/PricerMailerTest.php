@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Fei\Service\Mailer\Client;
 
 use Codeception\Test\Unit;
@@ -19,9 +20,11 @@ class PricerMailerTest extends Unit
     {
         $mailer = new PricerMailer();
         $mailer->setEmailDelimiters(['test']);
+
         $this->assertEquals(['test'], $mailer->getEmailDelimiters());
         $this->assertAttributeEquals($mailer->getEmailDelimiters(), 'emailDelimiters', $mailer);
     }
+
     public function testAddressFilter()
     {
         $mail = new Mail();
@@ -30,8 +33,11 @@ class PricerMailerTest extends Unit
             'dest1@domain.com, dest2@domain.com ; dest3@domain.com dest4@domain.com',
             'peterb@cargospectrum.com	sergeys@cargospectrum.com	martinh@cargospectrum.com'
         ]);
+
         $mailer = new PricerMailer();
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals([
             'abc/cde@mail.com'=>'abc/cde@mail.com',
             'dest1@domain.com' => 'dest1@domain.com',
@@ -45,58 +51,80 @@ class PricerMailerTest extends Unit
             $mail->getRecipients()
         );
     }
+
     public function testAddressFilterEmailNull()
     {
         $mail = new Mail();
         $mail->addRecipient([null]);
+
         $mailer = new PricerMailer();
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals([], $mail->getRecipients());
     }
     public function testAddressFilterEmailNullWithLogger()
     {
         $mail = new Mail();
         $mail->setRecipients([null]);
+
         $notifications = [];
+
         $logger = $this->createMock(Logger::class);
         $logger->expects($this->any())->method('notify')->willReturnCallback(
             function ($notification) use (&$notifications) {
                 $notifications[] = $notification;
             }
         );
+
         $mailer = (new PricerMailer())->setAuditLogger($logger);
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertCount(0, $notifications);
     }
+
     public function testAddressFilterEmailEmpty()
     {
         $mail = new Mail();
         $mail->setRecipients(['']);
+
         $mailer = new PricerMailer();
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals([], $mail->getRecipients());
     }
     public function testAddressFilterAll()
     {
         $mail = new Mail();
         $mail->setRecipients(['not even a address email, for ever !']);
+
         $mailer = new PricerMailer();
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals([], $mail->getRecipients());
     }
+
     public function testAddressFilterAllWithLogger()
     {
         $mail = new Mail();
         $mail->setRecipients(['not even a address email, for ever !']);
+
         $notifications = [];
+
         $logger = $this->createMock(Logger::class);
         $logger->expects($this->any())->method('notify')->willReturnCallback(
             function ($notification) use (&$notifications) {
                 $notifications[] = $notification;
             }
         );
+
         $mailer = (new PricerMailer())->setAuditLogger($logger);
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals(
             [
                 '"`not`, `even`, `a`, `address`, `email`, `for`, `ever`, `!` are not valid email address',
@@ -105,19 +133,25 @@ class PricerMailerTest extends Unit
             array_map(function ($notification) { return $notification->getMessage(); }, $notifications)
         );
     }
+
     public function testAddressFilterAllWithLoggerSingular()
     {
         $mail = new Mail();
         $mail->setRecipients(['notaemail', 'notevenamail']);
+
         $notifications = [];
+
         $logger = $this->createMock(Logger::class);
         $logger->expects($this->any())->method('notify')->willReturnCallback(
             function ($notification) use (&$notifications) {
                 $notifications[] = $notification;
             }
         );
+
         $mailer = (new PricerMailer())->setAuditLogger($logger);
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals(
             [
                 '"`notaemail` is not a valid email address',
@@ -127,12 +161,16 @@ class PricerMailerTest extends Unit
             array_map(function ($notification) { return $notification->getMessage(); }, $notifications)
         );
     }
+
     public function testAddressFilterWithLabel()
     {
         $mail = new Mail();
         $mail->setRecipients(['dest1@domain.com, dest2@domain.com ; dest3@domain.com dest4@domain.com ; abc/cde@mail.com' => 'a label']);
+
         $mailer = new PricerMailer();
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals([
             'abc/cde@mail.com' => 'a label',
             'dest1@domain.com' => 'a label',
@@ -143,14 +181,18 @@ class PricerMailerTest extends Unit
             $mail->getRecipients()
         );
     }
+
     public function testAddressFilterWithBadEmailAddress()
     {
         $mail = new Mail();
         $mail->setRecipients(
             ['abc/cde@mail.com, dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
         );
+
         $mailer = new PricerMailer();
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals([
             'abc/cde@mail.com'=> 'abc/cde@mail.com',
             'dest1@domain.com' => 'dest1@domain.com',
@@ -160,41 +202,54 @@ class PricerMailerTest extends Unit
             $mail->getRecipients()
         );
     }
+
     public function testAddressFilterWithBadEmailAddressAndLogging()
     {
         $mail = new Mail();
         $mail->setRecipients(
             ['abc/cde@mail.com , dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
         );
+
         $notifications = [];
+
         $logger = $this->createMock(Logger::class);
         $logger->expects($this->any())->method('notify')->willReturnCallback(
             function ($notification) use (&$notifications) {
                 $notifications[] = $notification;
             }
         );
+
         $mailer = (new PricerMailer())->setAuditLogger($logger);
+
         $mailer->sanitizeAddress($mail);
+
         $this->assertEquals(
             ['"`notaaddressemail`, `another`, `not`, `a`, `email` are not valid email address'],
             array_map(function ($notification) { return $notification->getMessage(); }, $notifications)
         );
     }
+
     public function testAddressFilterAndTransmit()
     {
         $mail = $this->getValidMailInstance();
         $mail->setRecipients(
             ['abc/cde@mail.com, dest1@domain.com, notaaddressemail ; dest3@domain.com dest4@domain.com another not a email']
         );
+
         $mail->addBcc('abc/cde@mail.com|dest1@domain.com|notaaddressemail|dest3@domain.com|dest4@domain.com', 'Test label');
         $mail->addCc('abc/cde@mail.com|dest1@domain.com,dest3@domain.com,; dest4@domain.com', '');
+
         $transport = $this->createMock(SyncTransportInterface::class);
         $transport->expects($this->once())->method('send')->willReturn(true);
+
         $logger = $this->createMock(Logger::class);
         $logger->expects($this->never())->method('notify');
+
         $mailer = new PricerMailer([Mailer::OPTION_BASEURL => 'http://url']);
         $mailer->setTransport($transport);
+
         $mailer->transmit($mail);
+
         $this->assertEquals(
             [
                 'abc/cde@mail.com' => 'abc/cde@mail.com',
@@ -213,26 +268,14 @@ class PricerMailerTest extends Unit
             ], $mail->getRecipients()
         );
     }
-    public function testAdressWithSlash()
-    {
-        $mail = new Mail();
-        $mail->setRecipients([
-            'abc/cde@mail.com',
-        ]);
-        $mailer = new PricerMailer();
-        $mailer->sanitizeAddress($mail);
-        $this->assertEquals([
-            'abc/cde@mail.com'=>'abc/cde@mail.com',
-        ],
-            $mail->getRecipients()
-        );
-    }
+
     /**
      * @return Mail
      */
     private function getValidMailInstance()
     {
         $mail = new Mail();
+
         return $mail->setSubject('Test')
             ->setTextBody('Test')
             ->setSender(['tes@email.com'])
