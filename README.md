@@ -1,25 +1,67 @@
-# Mailer client
+# Service Mailer - Client
 
-This is the client you should use to send email to Mail Api.
+[![GitHub release](https://img.shields.io/github/release/flash-global/mailer-client.svg?style=for-the-badge)](README.md) 
 
-The client can use two kind of transports to send emails:
+## Table of contents
+- [Purpose](#purpose)
+- [Requirements](#requirements)
+    - [Runtime](#runtime)
+- [Step by step installation](#step-by-step-installation)
+    - [Initialization](#initialization)
+    - [Settings](#settings)
+    - [Known issues](#known-issues)
+- [Contribution](#contribution)
+- [Link to documentation](#link-to-documentation)
+    - [Examples](#examples)
 
-* Asynchronous transport implemented by `BeanstalkProxyTransport`
-* Synchronous transport implemented by `BasicTransport`
 
-`BeanstalkProxyTransport` delegate the API consumption to workers by sending email properties to a Beanstalkd queue.
 
-`BasicTransport` use the _classic_ HTTP layer to send emails.
+## Purpose
+This client permit to use the `Mailer Api`. Thanks to it, you could request the API to :
+* Send mails
 
-If asynchronous transport is set, it will act as default transport. Synchronous transport will be a fallback in case when asynchronous transport fails.
+easily
 
-## Installation
+## Requirements 
 
-Add this requirement to your `composer.json`: `"fei/mailer-client": : "^1.0.0"`
+### Runtime
+- PHP 5.5
 
-Or execute `composer.phar require fei/mailer-client` in your terminal.
+## Step by step Installation
+> for all purposes (development, contribution and production)
 
-## Quick start
+### Initialization
+- Cloning repository 
+```git clone https://github.com/flash-global/mailer-client.git```
+- Run Composer depedencies installation
+```composer install```
+
+### Settings
+
+Don't forget to set the right `baseUrl` :
+
+```php
+<?php
+$logger = new Logger([
+    Logger::OPTION_BASEURL => 'http://127.0.0.1:8082',
+    Logger::OPTION_FILTER => Notification::LVL_INFO
+]);
+$logger->setTransport(new BasicTransport());
+```
+
+### Known issues
+No known issue at this time.
+
+## Contribution
+As FEI Service, designed and made by OpCoding. The contribution workflow will involve both technical teams. Feel free to contribute, to improve features and apply patches, but keep in mind to carefully deal with pull request. Merging must be the product of complete discussions between Flash and OpCoding teams :) 
+
+## Link to documentation 
+
+### Examples
+You can test this client easily thanks to the folder [example](example)
+
+Here, an example on how to use : `php /my/client-client/folder/examples/client.php` 
+
 
 Let's start with a simple client :
 
@@ -57,7 +99,7 @@ if ($return) {
 Keep in mind that you should always initialize a mailer client by a dependency injection component, since it requires at
 least one dependency, which is the transport. Moreover, the `OPTION_BASEURL` parameter should also depends on environment.
 
-## Real world example
+#### Real world example
 
 Below a more robust example which use the `BeanstalkProxyTransport` as default transport.
 
@@ -105,7 +147,7 @@ The message workflow:
 Client -> Pheanstalkd -> Workers -> Mail API server
 ```
 
-### Use the logger
+#### Use the logger
 
 Mailer client is _Logger client aware_. You could set a logger instance like this example below in order to activate logging functionality.
 
@@ -125,7 +167,7 @@ $mailer->setLogger($logger); // Set and activate the the logger functionality
 
 As is each mail sent will be recorded with logger service.
 
-## Email and attachments
+#### Email and attachments
 
 Here a example if you need to send email with attachments :
 
@@ -172,7 +214,7 @@ $mailer->setTransport(new BasicTransport());
 $mailer->transmit($message);
 ```
 
-### Embedding attachment
+#### Embedding attachment
 
 Sometime, you need to include image (or other media) inline in your message. You could use a resource URL in order to
 linking the media but this approach is usually blocked by mail clients. A another approach is to embed your media
@@ -211,7 +253,7 @@ HTML
 
 And that's it.
 
-## Catch them all
+#### Catch them all
 
 In non production environment, you often don't need to send email to the real recipient. For testing purpose, you could
 initialize the client with the option `OPTION_CATCHALL_ADDRESS` and all email will be forwarded to email address passed
@@ -229,7 +271,7 @@ $mailer = new Mailer([
 
 ```
 
-## Add callback functions before Mail instance validation
+#### Add callback functions before Mail instance validation
 
 For different needs, you could registered a callback to apply on `Mail` to be send before its state validation.
 
@@ -255,19 +297,3 @@ We provide a couple of another method to manage callbacks:
 * `Mailer::addFirstCallbackBeforeValidation`: append a callback on the first place of the stack to be executed in
   contrast to `addCallbackBeforeValidation` which place the callback in the end of the chain execution. 
 * `Mailer::clearCallbackBeforeValidation`: remove all callback registered in the stack 
-
-## Pricer integration: meet the `PricerMailer` class
-
-We provide a child class of `Mailer` for the Pricer need: `PricerMailer`.
-
-`PricerMailer` extends functionalities `Mailer` plus a callback which apply email filtering on the `Mail` instance to
-be send. Naturally, you can remove this filter or add yours own.
-
-## Client option
-
-Only one option is available which can be passed to the `__construct()` or `setOptions()` methods:
-
-| Option                  | Description                                    | Type   | Possible Values                                | Default |
-|-------------------------|------------------------------------------------|--------|------------------------------------------------|---------|
-| OPTION_BASEURL          | This is the server to which send the requests. | string | Any URL, including protocol but excluding path | -       |
-| OPTION_CATCHALL_ADDRESS | Recipient to substitute to any other. When used, original recipients, ccs, bccs are prepended to mail body.| string | Any valid email address | - |
