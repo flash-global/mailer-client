@@ -1,4 +1,5 @@
 # Mailer client
+[![GitHub license](https://img.shields.io/github/license/flash-global/mailer-client.svg)](https://github.com/flash-global/mailer-client)![continuousphp](https://img.shields.io/continuousphp/git-hub/flash-global/mailer-client.svg)[![GitHub issues](https://img.shields.io/github/issues/flash-global/mailer-client.svg)](https://github.com/flash-global/mailer-client/issues)
 
 This is the client you should use to send email to Mail Api.
 
