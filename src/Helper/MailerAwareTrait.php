@@ -8,7 +8,6 @@
 
 namespace Fei\Service\Mailer\Client\Helper;
 
-
 use Fei\Service\Mailer\Client\Mailer;
 
 trait MailerAwareTrait

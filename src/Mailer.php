@@ -78,7 +78,7 @@ class Mailer extends AbstractApiClient
 
         $validator = new MailValidator();
         if (!$validator->validate($mail)) {
-            if(empty($this->getLogger())) {
+            if (empty($this->getLogger())) {
                 throw new \LogicException(sprintf("Mail instance is not valid:\n%s", $validator->getErrorsAsString()));
             }
 
@@ -91,9 +91,9 @@ class Mailer extends AbstractApiClient
             return false;
         }
 
-        if($this->getOption(self::OPTION_LOG_MAIL_SENT)) {
-            if(empty($this->getAuditLogger())) {
-                if(empty($this->getLogger())) {
+        if ($this->getOption(self::OPTION_LOG_MAIL_SENT)) {
+            if (empty($this->getAuditLogger())) {
+                if (empty($this->getLogger())) {
                     throw new \LogicException("A logger has to be set for logging mails.");
                 }
                 $this->setAuditLogger($this->getLogger());
@@ -101,20 +101,27 @@ class Mailer extends AbstractApiClient
         }
 
         // handle recipient rerouting if needed
-        if($catchall = $this->getOption(self::OPTION_CATCHALL_ADDRESS))
-        {
+        if ($catchall = $this->getOption(self::OPTION_CATCHALL_ADDRESS)) {
             $recipients = $mail->getRecipients();
             $cc = $mail->getCc();
             $bcc = $mail->getBcc();
 
             $info = '**************************************************' . PHP_EOL;
             $info .= 'Original recipients: ' . "\t" . implode(', ', $recipients) . PHP_EOL;
-            if($cc) $info .= 'Original cc: ' . "\t" . implode(', ', $cc) . PHP_EOL;
-            if($bcc) $info .= 'Original bcc: ' . "\t" . implode(', ', $bcc) . PHP_EOL;
+            if ($cc) {
+                $info .= 'Original cc: ' . "\t" . implode(', ', $cc) . PHP_EOL;
+            }
+            if ($bcc) {
+                $info .= 'Original bcc: ' . "\t" . implode(', ', $bcc) . PHP_EOL;
+            }
             $info .= '**************************************************' . PHP_EOL;
 
-            if($mail->getTextBody()) $mail->setTextBody($info . $mail->getTextBody());
-            if($mail->getHtmlBody()) $mail->setHtmlBody($info . $mail->getHtmlBody());
+            if ($mail->getTextBody()) {
+                $mail->setTextBody($info . $mail->getTextBody());
+            }
+            if ($mail->getHtmlBody()) {
+                $mail->setHtmlBody($info . $mail->getHtmlBody());
+            }
 
             $mail->setSubject('[Caught] ' . $mail->getSubject());
             $mail->clearRecipients();

@@ -72,8 +72,7 @@ class PricerMailer extends Mailer
                         ->setCategory(Notification::AUDIT)
                         ->setContext($mail->getContext())
                         ->setMessage($message)
-                        ->setLevel(Notification::LVL_WARNING)
-                    );
+                        ->setLevel(Notification::LVL_WARNING));
                 }
 
                 $isLabel = !($email == $label);
