@@ -1,42 +1,33 @@
 {
-    "name": "fei/mailer-client",
-    "description": "Flash mailer client",
-    "type": "project",
-    "keywords": [
-        "mailer",
-        "client"
-    ],
-    "authors": [
-        {
-            "name": "Gauthier Delamarre",
-            "email": "gauthier@opcoding.eu",
-            "role": "lead"
-        },
-        {
-            "name": "Vincent Simonin",
-            "email": "vsi@opcoding.eu",
-            "role": "developer"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Fei\\Service\\Mailer\\Client\\": "src"
-        }
-    },
-    "require": {
-        "fei/mailer-common": "^1.0.3",
-        "fei/api-client": "^1.1.0",
-        "fei/logger-client": "^1.2.4",
-        "zendframework/zend-json": "^2.4.9",
-        "egulias/email-validator": "^2.1"
-    },
-    "require-dev": {
-        "codeception/codeception": "^2.2"
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.flash-global.net"
-        }
-    ]
+  "name": "fei/mailer-client",
+  "description": "Flash mailer client",
+  "type": "project",
+  "keywords": [
+    "mailer",
+    "client"
+  ],
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Yoctu",
+      "email": "contact@yoctu.com",
+      "homepage": "http://yoctu.com/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Fei\\Service\\Mailer\\Client\\": "src"
+    }
+  },
+  "require": {
+    "fei/mailer-common": "^1.0.18",
+    "fei/api-client": "^1.2.7",
+    "fei/logger-client": "^1.2.11",
+    "zendframework/zend-json": "^2.4.9",
+    "egulias/email-validator": "^2.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2",
+    "squizlabs/php_codesniffer": "3.*"
+  }
 }
