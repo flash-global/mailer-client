@@ -11,11 +11,12 @@ namespace Tests\Fei\Service\Mailer\Client\Helper;
 use Fei\Service\Mailer\Client\Helper\MailerAwareInterface;
 use Fei\Service\Mailer\Client\Helper\MailerAwareTrait;
 use Fei\Service\Mailer\Client\Mailer;
+use Codeception\Test\Unit;
 
 /**
  * MailerAwareTraitTest
  */
-class MailerAwareTraitTest extends \PHPUnit_Framework_TestCase
+class MailerAwareTraitTest extends Unit
 {
     public function testSetGetMailer()
     {
