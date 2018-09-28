@@ -12,11 +12,16 @@ use Pheanstalk\Pheanstalk;
 
 $logger = new Logger([
     Logger::OPTION_BASEURL => 'http://127.0.0.1:8082',
-    Logger::OPTION_FILTER => Notification::LVL_INFO
+    Logger::OPTION_FILTER => Notification::LVL_INFO,
+    Logger::OPTION_HEADER_AUTHORIZATION => 'key'
 ]);
 $logger->setTransport(new BasicTransport());
 
-$mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081']);
+$mailer = new Mailer([
+    Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081',
+    Mailer::OPTION_HEADER_AUTHORIZATION => 'key'
+]);
+
 $proxy = new BeanstalkProxyTransport();
 $proxy->setPheanstalk(new Pheanstalk('127.0.0.1'));
 $mailer->setAsyncTransport($proxy);

@@ -34,7 +34,10 @@ use Fei\ApiClient\Transport\BasicTransport;
 use Fei\Service\Mailer\Entity\Mail;
 
 // The client
-$mailer = new Mailer(array(Mailer::OPTION_BASEURL => 'https://api_host'));
+$mailer = new Mailer([
+    Mailer::OPTION_BASEURL => 'https://api_host',
+    Mailer::OPTION_HEADER_AUTHORIZATION => 'key'
+]);
 // Optional: a BasicTransport will be instantiate if no synchronous transport was found
 $mailer->setTransport(new BasicTransport());
 
@@ -73,7 +76,10 @@ use Fei\Service\Mailer\Client\Mailer;
 use Fei\Service\Mailer\Entity\Mail;
 use Pheanstalk\Pheanstalk;
 
-$mailer = new Mailer(array(Mailer::OPTION_BASEURL => 'http://api_host'));
+$mailer = new Mailer([
+    Mailer::OPTION_BASEURL => 'https://api_host',
+    Mailer::OPTION_HEADER_AUTHORIZATION => 'key'
+]);
 
 $async = new BeanstalkProxyTransport();
 $async->setPheanstalk(new Pheanstalk('host'));
@@ -115,11 +121,15 @@ Mailer client is _Logger client aware_. You could set a logger instance like thi
 
 $logger = new Logger([
     Logger::OPTION_BASEURL => 'http://127.0.0.1:8082',
-    Logger::OPTION_FILTER => Notification::LVL_INFO
+    Logger::OPTION_FILTER => Notification::LVL_INFO,
+    Logger::OPTION_HEADER_AUTHORIZATION => 'key'
 ]);
 $logger->setTransport(new BasicTransport());
 
-$mailer = new Mailer([Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081']);
+$mailer = new Mailer([
+    Mailer::OPTION_BASEURL => 'https://api_host',
+    Mailer::OPTION_HEADER_AUTHORIZATION => 'key'
+]);
 $mailer->setTransport(new BasicTransport());
 $mailer->setLogger($logger); // Set and activate the the logger functionality
 ```
@@ -168,7 +178,10 @@ $attachment->setAttachmentFilename('another-filename.txt');
 $attachment->setMimeType('text/plain');
 $message->addAttachment($attachment);
 
-$mailer = new Mailer(array(Mailer::OPTION_BASEURL => 'https://api_host'));
+$mailer = new Mailer([
+    Mailer::OPTION_BASEURL => 'https://api_host',
+    Mailer::OPTION_HEADER_AUTHORIZATION => 'key'
+]);
 $mailer->setTransport(new BasicTransport());
 $mailer->transmit($message);
 ```
@@ -224,8 +237,9 @@ to this option.
 use Fei\Service\Mailer\Client\Mailer;
 
 $mailer = new Mailer([
-    Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081',
-    Mailer::OPTION_CATCHALL_ADDRESS => 'testing@email.com'
+    Mailer::OPTION_BASEURL => 'https://api_host',
+    Mailer::OPTION_CATCHALL_ADDRESS => 'testing@email.com',
+    Mailer::OPTION_HEADER_AUTHORIZATION => 'key'
 ]);
 
 ```
@@ -272,3 +286,4 @@ Only one option is available which can be passed to the `__construct()` or `setO
 |-------------------------|------------------------------------------------|--------|------------------------------------------------|---------|
 | OPTION_BASEURL          | This is the server to which send the requests. | string | Any URL, including protocol but excluding path | -       |
 | OPTION_CATCHALL_ADDRESS | Recipient to substitute to any other. When used, original recipients, ccs, bccs are prepended to mail body.| string | Any valid email address | - |
+| OPTION_HEADER_AUTHORIZATION    | Api Key for authentification   | string | Any string value                               | ''      |

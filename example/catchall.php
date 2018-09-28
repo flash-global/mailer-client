@@ -5,8 +5,10 @@ require __DIR__ . '/../vendor/autoload.php';
 use Fei\Service\Mailer\Client\Mailer;
 use Fei\Service\Mailer\Entity\Mail;
 
-$mailer = new Mailer(array(Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081'));
-
+$mailer = new Mailer([
+    Mailer::OPTION_BASEURL => 'http://127.0.0.1:8081',
+    Mailer::OPTION_HEADER_AUTHORIZATION => 'key'
+]);
 $message = new Mail();
 $message->setSubject('This mail has been caught.');
 $message->setTextBody('This is a example message');
