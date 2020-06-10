@@ -17,7 +17,7 @@ class PricerMailer extends Mailer
     /**
      * @var array
      */
-    protected $emailDelimiters = array(',', ';', '/', '-', ' ', "\t");
+    protected $emailDelimiters = array(',', ';', '/', ' ', "\t");
 
     /**
      * PricerMailer constructor.
