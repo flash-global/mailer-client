@@ -76,7 +76,7 @@ class PricerMailerTest extends Unit
             }
         );
 
-        $mailer = (new PricerMailer())->setAuditLogger($logger);
+        $mailer = (new PricerMailer())->setLogger($logger);
 
         $mailer->sanitizeAddress($mail);
 
@@ -121,7 +121,7 @@ class PricerMailerTest extends Unit
             }
         );
 
-        $mailer = (new PricerMailer())->setAuditLogger($logger);
+        $mailer = (new PricerMailer())->setLogger($logger);
 
         $mailer->sanitizeAddress($mail);
 
@@ -148,7 +148,7 @@ class PricerMailerTest extends Unit
             }
         );
 
-        $mailer = (new PricerMailer())->setAuditLogger($logger);
+        $mailer = (new PricerMailer())->setLogger($logger);
 
         $mailer->sanitizeAddress($mail);
 
@@ -217,7 +217,7 @@ class PricerMailerTest extends Unit
             }
         );
 
-        $mailer = (new PricerMailer())->setAuditLogger($logger);
+        $mailer = (new PricerMailer())->setLogger($logger);
 
         $mailer->sanitizeAddress($mail);
 
