@@ -6,7 +6,7 @@ php:
   - 7.2
 
 import:
-  - source: flash-global/travis:common.yml@master
+  - source: flash-global/travis-public:common.yml@master
     mode: deep_merge_append
-  - source: flash-global/travis:php/common.yml@master
+  - source: flash-global/travis-public:php/common.yml@master
     mode: deep_merge_append
