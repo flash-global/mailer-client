@@ -7,6 +7,11 @@
     "client"
   ],
   "license": "GPL-3.0",
+  "config": {
+    "platform": {
+      "php": "7.0.30"
+    }
+  },
   "authors": [
     {
       "name": "Yoctu",
@@ -20,6 +25,7 @@
     }
   },
   "require": {
+    "php": ">=7.0",
     "fei/mailer-common": "^1.0.18",
     "fei/api-client": "^1.2.7",
     "fei/logger-client": "^1.2.11",
