@@ -4,6 +4,7 @@ namespace Fei\Service\Mailer\Client;
 
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Fei\Service\Logger\Client\Logger;
 use Fei\Service\Logger\Entity\Notification;
 use Fei\Service\Mailer\Entity\Mail;
 
@@ -62,17 +63,19 @@ class PricerMailer extends Mailer
                     }
                 );
 
-                if (!empty($invalid)) {
+                if (!empty($invalid) && $this->getLogger() instanceof Logger) {
                     $message = count($invalid) > 1
                         ? sprintf('"%s are not valid email address', implode(', ', $invalid))
                         : sprintf('"%s is not a valid email address', implode(', ', $invalid));
 
-                    $this->sendAuditNotification((new Notification())
+                    $notification = (new Notification())
                         ->setNamespace('/mailer/client')
                         ->setCategory(Notification::AUDIT)
                         ->setContext($mail->getContext())
                         ->setMessage($message)
-                        ->setLevel(Notification::LVL_WARNING));
+                        ->setLevel(Notification::LVL_WARNING);
+
+                    $this->getLogger()->notify($notification);
                 }
 
                 $isLabel = !($email == $label);
@@ -82,14 +85,16 @@ class PricerMailer extends Mailer
             }
 
             if (!empty($address) && empty($sanitized)) {
-                $this->sendAuditNotification(
-                    (new Notification())
+                if ($this->getLogger() instanceof Logger) {
+                    $notification = (new Notification())
                         ->setNamespace('/mailer/client')
                         ->setCategory(Notification::AUDIT)
                         ->setContext($mail->getContext())
                         ->setMessage('Got empty address email after address email cleaning')
-                        ->setLevel(Notification::LVL_WARNING)
-                );
+                        ->setLevel(Notification::LVL_WARNING);
+
+                    $this->getLogger()->notify($notification);
+                }
             }
 
             return $sanitized;

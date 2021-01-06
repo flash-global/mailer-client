@@ -33,9 +33,6 @@ class Mailer extends AbstractApiClient
      */
     protected $logger;
 
-    /** @var  Logger */
-    protected $auditLogger;
-
     /**
      * @var array Supported encodings. Order matter.
      * @see http://php.net/manual/en/mbstring.supported-encodings.php
@@ -89,15 +86,6 @@ class Mailer extends AbstractApiClient
             $this->getLogger()->notify($notification);
 
             return false;
-        }
-
-        if ($this->getOption(self::OPTION_LOG_MAIL_SENT)) {
-            if (empty($this->getAuditLogger())) {
-                if (empty($this->getLogger())) {
-                    throw new \LogicException("A logger has to be set for logging mails.");
-                }
-                $this->setAuditLogger($this->getLogger());
-            }
         }
 
         // handle recipient rerouting if needed
@@ -178,15 +166,6 @@ class Mailer extends AbstractApiClient
 
         try {
             $response = $this->send($request, ApiRequestOption::NO_RESPONSE);
-
-            if ($response && $this->getAuditLogger() instanceof Logger) {
-                $notification
-                    ->setMessage('Successfully sent mail')
-                    ->setLevel(Notification::LVL_INFO)
-                ;
-
-                $this->getAuditLogger()->notify($notification);
-            }
         } catch (\Exception $e) {
             if ($this->getLogger() instanceof Logger) {
                 $notification
@@ -230,26 +209,6 @@ class Mailer extends AbstractApiClient
     public function setLogger(Logger $logger)
     {
         $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getAuditLogger()
-    {
-        return $this->auditLogger;
-    }
-
-    /**
-     * @param Logger $auditLogger
-     *
-     * @return $this
-     */
-    public function setAuditLogger($auditLogger)
-    {
-        $this->auditLogger = $auditLogger;
 
         return $this;
     }
@@ -318,18 +277,6 @@ class Mailer extends AbstractApiClient
     {
         foreach ($this->getCallbackBeforeValidation() as $callback) {
             $callback($mail);
-        }
-    }
-
-    /**
-     * Send a notification to Audit Logger
-     *
-     * @param Notification $notification
-     */
-    protected function sendAuditNotification(Notification $notification)
-    {
-        if ($this->getAuditLogger() instanceof Logger) {
-            $this->getAuditLogger()->notify($notification);
         }
     }
 
